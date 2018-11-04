@@ -7,7 +7,6 @@ import androidx.room.Room
 import ca.nick.redditcoroutines.data.local.Db
 import dagger.Module
 import dagger.Provides
-import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -28,10 +27,6 @@ class LocalDataModule {
     @Provides
     fun sharedPrefs(application: Application): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(application)
-
-    @Singleton
-    @Provides
-    fun calendar(): Calendar = Calendar.getInstance()
 
     @Singleton
     @Provides

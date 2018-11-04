@@ -2,14 +2,14 @@ package ca.nick.redditcoroutines.data.local
 
 import android.content.SharedPreferences
 import ca.nick.redditcoroutines.di.StaleDataThreshold
-import java.util.*
+import ca.nick.redditcoroutines.utils.CurrentTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class LocalDataCachingStrategy @Inject constructor(
     private val sharedPreferences: SharedPreferences,
-    private val calendar: Calendar,
+    private val currentTime: CurrentTime,
     @StaleDataThreshold
     private val staleDataThreshold: Long
 ) {
@@ -19,15 +19,14 @@ class LocalDataCachingStrategy @Inject constructor(
     }
 
     fun isPersistedDataStale(): Boolean {
-        val currentTime = calendar.timeInMillis
         val lastTimeDataFetchedSuccessfully =
             sharedPreferences.getLong(KEY_LAST_TIME_DATA_FETCHED_SUCCESSFULLY, 0L)
-        return (currentTime - lastTimeDataFetchedSuccessfully) >= staleDataThreshold
+        return (currentTime.timeInMillis() - lastTimeDataFetchedSuccessfully) >= staleDataThreshold
     }
 
     fun setLastTimeDataFetchedSuccessfully() {
         sharedPreferences.edit()
-            .putLong(KEY_LAST_TIME_DATA_FETCHED_SUCCESSFULLY, calendar.timeInMillis)
+            .putLong(KEY_LAST_TIME_DATA_FETCHED_SUCCESSFULLY, currentTime.timeInMillis())
             .apply()
     }
 }
