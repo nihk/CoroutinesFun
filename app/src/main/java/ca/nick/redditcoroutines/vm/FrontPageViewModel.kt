@@ -56,6 +56,7 @@ class FrontPageViewModel @Inject constructor(private val repository: Repository)
 
     override fun onCleared() {
         super.onCleared()
+        _redditItems.removeSource(repository.redditItems)
         job.cancel()
     }
 }
