@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import ca.nick.redditcoroutines.R
+import ca.nick.redditcoroutines.data.RedditItem
 import ca.nick.redditcoroutines.vm.FrontPageViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_front_page.*
@@ -43,6 +44,10 @@ class FrontPageFragment : BaseFragment() {
         viewModel.errorMessage.observe(this, Observer { event ->
             event.getContentIfNotHandled()?.let {
                 Snackbar.make(root, it, Snackbar.LENGTH_SHORT).show()
+                // Fallback to locally cached data, if any
+                viewModel.redditItems.value?.let { items ->
+                    submitList(items)
+                }
             }
         })
 
@@ -51,13 +56,15 @@ class FrontPageFragment : BaseFragment() {
         })
 
         viewModel.redditItems.observe(this, Observer {
-            adapter.submitList(it)
+            if (it.isEmpty() || viewModel.isPersistedDataStale()) {
+                viewModel.fetchRedditItems()
+            } else {
+                submitList(it)
+            }
         })
+    }
 
-        // FIXME: What's a better strategy for coordinating cached local content with a
-        // remote request in flight?
-        if (savedInstanceState == null) {
-            viewModel.fetchRedditItems()
-        }
+    private fun submitList(items: List<RedditItem>) {
+        adapter.submitList(items)
     }
 }

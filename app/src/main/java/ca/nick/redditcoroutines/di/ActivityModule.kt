@@ -4,7 +4,7 @@ import ca.nick.redditcoroutines.ui.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
-@Module
+@Module(includes = [FragmentModule::class])
 abstract class ActivityModule {
 
     @ContributesAndroidInjector

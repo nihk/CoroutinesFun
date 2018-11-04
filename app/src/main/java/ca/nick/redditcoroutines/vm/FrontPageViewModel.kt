@@ -42,12 +42,17 @@ class FrontPageViewModel @Inject constructor(private val repository: Repository)
         try {
             _progressBarState.value = true
             block()
+            setLastTimeDataFetchedSuccessfully()
         } catch (error: Exception) {
             _errorMessage.value = Event(error.message)
         } finally {
             _progressBarState.value = false
         }
     }
+
+    fun isPersistedDataStale() = repository.isPersistedDataStale()
+
+    fun setLastTimeDataFetchedSuccessfully() = repository.setLastTimeDataFetchedSuccessfully()
 
     override fun onCleared() {
         super.onCleared()
