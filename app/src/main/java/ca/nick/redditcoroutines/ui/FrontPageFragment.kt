@@ -56,7 +56,7 @@ class FrontPageFragment : BaseFragment() {
         })
 
         viewModel.redditItems.observe(this, Observer {
-            if (it.isEmpty() || (viewModel.isPersistedDataStale() && savedInstanceState == null)) {
+            if (viewModel.isPersistedDataStale() && savedInstanceState == null) {
                 viewModel.fetchRedditItems()
             } else {
                 submitList(it)
