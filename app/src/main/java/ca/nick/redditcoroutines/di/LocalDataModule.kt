@@ -17,6 +17,7 @@ class LocalDataModule {
     @Provides
     fun db(app: Application) =
         Room.databaseBuilder(app, Db::class.java, Db.DATABASE_NAME)
+            .fallbackToDestructiveMigration()
             .build()
 
     @Singleton
@@ -31,5 +32,5 @@ class LocalDataModule {
     @Singleton
     @Provides
     @StaleDataThreshold
-    fun staleDataThreshold() = TimeUnit.SECONDS.toMillis(15)
+    fun staleDataThreshold() = TimeUnit.SECONDS.toMillis(15)  // Short threshold for demo purposes
 }
