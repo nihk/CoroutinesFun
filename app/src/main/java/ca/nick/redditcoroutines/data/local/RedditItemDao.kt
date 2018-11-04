@@ -10,4 +10,7 @@ interface RedditItemDao : BaseDao<RedditItem> {
 
     @Query("SELECT * FROM ${RedditItem.TABLE_NAME}")
     fun getRedditItems(): LiveData<List<RedditItem>>
+
+    @Query("DELETE FROM ${RedditItem.TABLE_NAME}")
+    fun deleteAll()
 }

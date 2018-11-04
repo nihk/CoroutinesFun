@@ -26,13 +26,10 @@ class Repository @Inject constructor(
         }
     }
 
-    companion object {
-        const val KEY_LAST_TIME_DATA_FETCHED_SUCCESSFULLY = "last_time_data_fetched_successfully"
-    }
-
     suspend fun fetchRedditItems() {
         withContext(Dispatchers.IO) {
             val redditItems = redditService.fetchFrontPage().await()
+            redditItemDao.deleteAll()
             redditItemDao.insertEntities(redditItems)
         }
     }
